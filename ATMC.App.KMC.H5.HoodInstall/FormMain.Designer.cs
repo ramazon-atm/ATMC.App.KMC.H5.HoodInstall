@@ -1,7 +1,7 @@
 ﻿
 using ATMC.Common;
 
-namespace ATMC.App.PosAdj {
+namespace ATMC.App.KMC.H5.HoodInstall {
     partial class FormMain {
         /// <summary>
         /// Required designer variable.

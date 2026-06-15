@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ATMC.App.PosAdj {
+namespace ATMC.App.KMC.H5.HoodInstall {
     //TODO: Declare global variables and settings here as static
     internal static partial class Global {
         //Setting files
@@ -77,7 +77,7 @@ namespace ATMC.App.PosAdj {
         static void InitModels() {
             try {
                 Models?.ForEach(x => x.Init());
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
 
         public static void LoadModels() {
@@ -85,7 +85,7 @@ namespace ATMC.App.PosAdj {
                 Logger.Info("Loading models...");
                 Models = JsonUtils.Read<List<ModelConfig>>(Json.ReadFromFile(ModelSettingFile)) ?? new List<ModelConfig>();
                 InitModels();
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
 
         public static void SaveModels() {
@@ -96,7 +96,7 @@ namespace ATMC.App.PosAdj {
                     DialogUtils.ShowInfoMsg($"Model saved! ({ModelSettingFile})");
                     InitModels();
                 }
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
         #endregion
 

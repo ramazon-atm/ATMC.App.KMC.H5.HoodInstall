@@ -21,7 +21,7 @@ using System.Windows.Forms;
 using static ATMC.Common.WorkCell.WorkCell;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
-namespace ATMC.App.PosAdj {
+namespace ATMC.App.KMC.H5.HoodInstall {
     public partial class FormMain : Form {
         //0. APP VARIABLES
         //auto/manual mode
@@ -35,10 +35,8 @@ namespace ATMC.App.PosAdj {
 
         //The task queue to process input signals
         TaskQueue _tq = new TaskQueue("Main TaskQueue");
-        TaskQueue _hgtq = new TaskQueue("Body TaskQueue");
         //This variable stores current cycle context
         CycleContext_<ModelConfig, Result> _cycle = new CycleContext_<ModelConfig, Result>();
-        CycleContext_<ModelConfig, Result> _bodyCycle = new CycleContext_<ModelConfig, Result>();
         ModelMaker _modelMaker = null;
 
         //hw error
@@ -231,11 +229,15 @@ namespace ATMC.App.PosAdj {
                     //CYCLE TEST
                     case "cycle_test_refresh":
                         await dashboard.SetCycleTestModelList(Global.Models.Select(x => x.Name).ToArray());
-                        await Do_RESET(); 
-                        await Do_BodyRESET();
+                        await DO_RESET(); 
+                        await DO_START();
                         break;
 
-                    case "cycle_test_save": await SaveResultAsync(); await SaveBodyResultAsync(); _cycle.End(); _bodyCycle.End(); break;
+                    case "cycle_test_save": 
+                        await SaveResultAsync(); 
+                        //await SaveInstallResultAsync();
+                        _cycle.End();
+                        break;
 
                     case "cycle_test_set_model":
                         Logger.Log($"[TEST] Set Model = {value.GetString("")}");
@@ -381,6 +383,8 @@ namespace ATMC.App.PosAdj {
                     AlarmDialog.ShowAlarm($"Hw disconnected : {name}");
                 });
             }
+            if (name == "PLC" && connected == true) 
+                UpdateAUTOBit();
         }
 
         private void HwErrCode_BitChanged(int index, bool old_value, bool new_value) {
@@ -409,12 +413,12 @@ namespace ATMC.App.PosAdj {
         void SetAuto(bool auto) {
             try {
                 //If cannot go to auto mode -> go to manual mode
-                IsAuto =
-                titlebar.Auto =
-                statusbar.StripeMotionEnable = auto;
+                IsAuto = titlebar.Auto = statusbar.StripeMotionEnable = auto;
                 Logger.Warn(auto ? "AUTO MODE" : "MANUAL MODE");
                 dashboard.SetMode(auto).Wait();
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+                UpdateAUTOBit();
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
+
         }
         private void titlebar_AutoManualDoubleClickEvent(object sender, EventArgs e) {
             if(DialogUtils.AskForPermission() == false) return;
@@ -447,89 +451,52 @@ namespace ATMC.App.PosAdj {
             }
         }
 
-        void SetCurrentBodyModel(string model_name) {
-            try {
-                if (model_name == null) throw new ArgumentNullException(model_name);
-                Logger.Log($"Setting current hanger model = {model_name}...");
-                var model = Global.Models.Find(x => x.Name == model_name);
-                Logger.Log($"CurrentHangerModel = {model.Name} (ID={model.ID})");
-                _bodyCycle.Init(model.CreateResult());
-                DisplayBodyModel(model);
-            }
-            catch (Exception ex) {
-                Logger.Error(ex.Message);
-                Logger.Trace(ex.StackTrace);
-            }
-        }
-
         void SetCurrentModel(int model_number) => SetCurrentModel(Global.Models.Find(x => x.Match(model_number))?.Name);
-
-        void SetCurrentBodyModel(int model_number) => SetCurrentBodyModel(Global.Models.Find(x => x.Match(model_number))?.Name);
 
         //18. Read work cycle info from PLC
         async Task ReadWorkCycleInfo() {
             try {
                 //read car type -> prepare current model
-                {
-                    int model_number = await _plc.Client.ReadBlockInt16(PlcBlock.CAR_TYPE.ToString());
-                    Logger.Log($"CAR_TYPE = {model_number}");
-                    SetCurrentModel(model_number);
-                }
-
-                var res = _cycle.GetResult();
-                //read  body no
-                {
-                    string body_no = await _plc.Client.ReadBlockUserString(PlcBlock.BODY_NO.ToString());
-                    Logger.Log($"BODY_NO = {body_no}");
-                    //Web: set body no
-                    await dashboard.SetBodyNo(body_no);
-                    res.BodyNo = body_no;
-                }
-
-                //cmt no
-                {
-                    var seq_no = await _plc.Client.ReadBlockUserString(PlcBlock.SEQ_NO.ToString());
-                    Logger.Log($"SEQ_NO = {seq_no}");
-                    //Web: set seq no
-                    await dashboard.SetSeqNo(seq_no);
-                    res.SeqNo = seq_no;
-                }
-            } catch(Exception ex) {
-                LotusAPI.Logger.Error(ex.Message);
-                LotusAPI.Logger.Debug(ex.StackTrace);
+                
+                int model_number = await _plc.Client.ReadBlockInt16(PlcBlock.CAR_TYPE.ToString());
+                Logger.Log($"CAR_TYPE = {model_number}");
+                SetCurrentModel(model_number);
+                
             }
-        }
+            catch (Exception ex) {
+            
+                LotusAPI.Logger.Error(ex.Message);
+                LotusAPI.Logger.Trace(ex.StackTrace);
+            }
 
-        async Task ReadBodyWorkCycleInfo() {
+            var res = _cycle.GetResult();
             try {
-                var plc = Global.WorkCell.PlcClients["PLC"];
 
-                //read car type -> prepare current model
-                {
-                    int model_number = await _plc.Client.ReadBlockInt16(PlcBlock.CAR_TYPE.ToString());
-                    SetCurrentBodyModel(model_number);
-                }
-
-                var res = _bodyCycle.GetResult();
                 //read  body no
-                {
-                    string body_no = await _plc.Client.ReadBlockUserString(PlcBlock.BODY_NO.ToString());
-                    res.BodyNo = body_no;
-                    //await dashboard.SetSeqNo(body_no);
-                    Logger.Log($"BODY_NO= {body_no}");
-                }
-
-                //cmt no
-                {
-                    var seq_no = await _plc.Client.ReadBlockUserString(PlcBlock.SEQ_NO.ToString());
-                    res.SeqNo = seq_no;
-                    //await dashboard.SetSeqNo(seq_no);
-                    Logger.Log($"SEQ_NO= {seq_no}");
-                }
+                
+                string body_no = await _plc.Client.ReadBlockUserString(PlcBlock.BODY_NO.ToString());
+                Logger.Log($"BODY_NO = {body_no}");
+                //Web: set body no
+                await dashboard.SetBodyNo(body_no);
+                res.BodyNo = body_no;
+                
             }
             catch (Exception ex) {
                 LotusAPI.Logger.Error(ex.Message);
-                LotusAPI.Logger.Debug(ex.StackTrace);
+                LotusAPI.Logger.Trace(ex.StackTrace);
+            }
+
+            //cmt no
+            try {
+                var seq_no = await _plc.Client.ReadBlockUserString(PlcBlock.SEQ_NO.ToString());
+                Logger.Log($"SEQ_NO = {seq_no}");
+                //Web: set seq no
+                await dashboard.SetSeqNo(seq_no);
+                res.SeqNo = seq_no;
+            }
+            catch(Exception ex) {
+                LotusAPI.Logger.Error(ex.Message);
+                LotusAPI.Logger.Trace(ex.StackTrace);
             }
         }
 
@@ -573,7 +540,7 @@ namespace ATMC.App.PosAdj {
                     try {
                         await robot.SetFrame(var_idx, H_robot); //unified
                         data_ok = true;
-                    } catch(Exception ex) { Logger.Error(ex.Message); }
+                    } catch(Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
 
                     if(data_ok) return true;
                     Logger.Warn($"Failed to send data to robot [{robot_name}] (try={try_id})");
@@ -591,7 +558,7 @@ namespace ATMC.App.PosAdj {
             try {
                 var res = _cycle.GetResult();
                 Logger.Log("Saving result...");
-                //res.SaveDB();
+                res.SaveDB();
                 await dashboard.SetHistory(DB.Engine);
 
                 AsyncInvoke(delegate {
@@ -600,26 +567,7 @@ namespace ATMC.App.PosAdj {
                 });
             } catch(Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
             await Task.CompletedTask;
-        }
-        async Task SaveBodyResultAsync() {
-            try {
-                var res = _bodyCycle.GetResult();
-                var res_bat = _cycle.GetResult();
-                Logger.Log("Saving result...");
-                //res.SaveDB();
-                res.SaveDB1(res_bat);
-                await dashboard.SetHistory(DB.Engine);
-
-                AsyncInvoke(delegate {
-                    res.ScreenShot = ControlUtils.GetScreenCrop(this);
-                    _ = Task.Run(() => res.Save());
-                });
-            }
-            catch (Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
-            await Task.CompletedTask;
-        }
-
-        
+        } 
 
         //============================================================
         // WORK CYCLE RELATED
@@ -633,7 +581,7 @@ namespace ATMC.App.PosAdj {
                     var vc = this.sv_Main;
                     var sv = vc.GetViewer();
                     FlyTo("org");
-                    sv["BAT/CAD"].UpdateObject(_cycle?.GetModel()?.BatReg?.CadModel, Color.Gray);
+                    sv["BODY/CAD"].UpdateObject(_cycle?.GetModel()?.Body12?.CadModel, Color.Gray);
 
                     sv.Render();
                 } catch(Exception ex) {
@@ -642,32 +590,7 @@ namespace ATMC.App.PosAdj {
                 }
             });
         }
-        void DisplayBodyModel(ModelConfig model) {
-            AsyncInvoke(delegate {
-                try {
-                    //3D view
-                    var vc = this.sv_Main;
-                    var sv = vc.GetViewer();
-                    FlyTo("org");
 
-                    if (Global.Setting.UseLHDegradeMode) {
-                        sv["BODY/CAD"].UpdateObject(_cycle?.GetModel()?.LhBodyReg?.CadModel, Color.Gray);
-                    }
-                    else if (Global.Setting.UseRHDegradeMode) {
-                        sv["BODY/CAD"].UpdateObject(_cycle?.GetModel()?.RhBodyReg?.CadModel, Color.Gray);
-                    }
-                    else {
-                        sv["BODY/CAD"].UpdateObject(_cycle?.GetModel()?.BodyReg?.CadModel, Color.Gray);
-                    }
-
-                    sv.Render();
-                }
-                catch (Exception ex) {
-                    Logger.Error(ex.Message);
-                    Logger.Trace(ex.StackTrace);
-                }
-            });
-        }
 
         //23. Update result view
         // result table format:
@@ -705,60 +628,21 @@ namespace ATMC.App.PosAdj {
         async Task UpdateResultView() {
 
             var r = _cycle.GetResult(throw_if_invalid: false);
-            var br = _bodyCycle.GetResult(throw_if_invalid: false);
-
             var GetResult = new Func<string, (string, RegistrationResult)>(key => (key, r?.GetResultOrDefault(key)));
-            var GetBodyResult = new Func<string, (string, RegistrationResult)>(key => (key, br?.GetResultOrDefault(key)));
-
             var tbl = WebUtils.GetResultTable("Result", new (string, RegistrationResult)[]{
-                GetResult(Global.KEY_BAT),
+                GetResult(Global.KEY_BODY12)
             });
-            var tbl1 = WebUtils.GetResultTable("Result", new (string, RegistrationResult)[]{
-                GetBodyResult(Global.KEY_BODY),
-                GetBodyResult(Global.KEY_LHBODY),
-                GetBodyResult(Global.KEY_RHBODY),
-            });
-
-
-            await dashboard.SetResult(tbl, tbl1);
+            await dashboard.SetResult(tbl);
 
         }
 
 
         //24. RESET
-        async Task Do_RESET() {
+        async Task DO_RESET() {
             try {
-                //BAT
                 //Save result if not saved
                 if(_cycle.ShouldSave) await SaveResultAsync();
                 _cycle.Reset();
-
-                //Clear display
-                AsyncInvoke(delegate {
-                    var viewer = sv_Main.GetViewer();
-                    FlyTo("org");
-                    viewer.Scene.Remove("CLOUDS");
-                    viewer.Scene.Remove("BAT");
-                    sv_Main.Render();
-                    //Web: clear dashboard result
-                    UpdateResultView().Wait();
-                });
-                //BAT_OK, BAT_NG, BAT_NEXT,
-                //Reset PLC output
-                if (UseRobotIO) await _robot_io?.Client?.SetOutput(0);
-                else {
-                    await _plc?.Client?.SetDOBit(OutputPin.BAT_OK, false);
-                    await _plc?.Client?.SetDOBit(OutputPin.BAT_NG, false);
-                } 
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
-        }
-
-        async Task Do_BodyRESET() {
-            try {
-                //BODY
-                //Save result if not saved
-                if (_bodyCycle.ShouldSave) await SaveBodyResultAsync();
-                _bodyCycle.Reset();
 
                 //Clear display
                 AsyncInvoke(delegate {
@@ -770,22 +654,18 @@ namespace ATMC.App.PosAdj {
                     //Web: clear dashboard result
                     UpdateResultView().Wait();
                 });
-
                 //Reset PLC output
                 if (UseRobotIO) await _robot_io?.Client?.SetOutput(0);
                 else {
-                    await _plc?.Client?.SetDOBit(OutputPin.BODY_OK, false);
-                    await _plc?.Client?.SetDOBit(OutputPin.BODY_NG, false);
-                    await _plc?.Client?.SetDOBit(OutputPin.BODY_NEXT, false);
-                }
-            }
-            catch (Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+                    await _plc?.Client?.SetDOBit(OutputPin.OK, false);
+                    await _plc?.Client?.SetDOBit(OutputPin.NG, false);
+                } 
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
 
         //25. START
-        async Task Do_START() {
+        async Task DO_START() {
             try {
-                //bat
                 if(_cycle.Started) { Logger.Warn("Cycle has already started."); return; }
 
                 _cycle.Start();
@@ -793,49 +673,33 @@ namespace ATMC.App.PosAdj {
                 if(IsAuto) {
                     if(UseRobotIO) await _robot_io?.Client?.SetOutput(0);
                     else {
-                        await _plc?.Client?.SetDOBit(OutputPin.BAT_OK, false);
-                        await _plc?.Client?.SetDOBit(OutputPin.BAT_NG, false);
+                        await _plc?.Client?.SetDOBit(OutputPin.OK, false);
+                        await _plc?.Client?.SetDOBit(OutputPin.NG, false);
                         await ReadWorkCycleInfo();
                     }
                 }
 
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
-        }
-
-        async Task Do_BodySTART() {
-            try {
-                //body
-
-                if (_bodyCycle.Started) { Logger.Warn("Cycle has already started."); return; }
-
-                _bodyCycle.Start();
-
-                if (IsAuto) {
-                    if (UseRobotIO) await _robot_io?.Client?.SetOutput(0);
-                    else {
-                        await _plc?.Client?.SetDOBit(OutputPin.BODY_OK, false);
-                        await _plc?.Client?.SetDOBit(OutputPin.BODY_NG, false);
-                        await _plc?.Client?.SetDOBit(OutputPin.BODY_NEXT, false);
-                        await ReadBodyWorkCycleInfo();
-                    }
-                }
-
-            }
-            catch (Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
 
         //26. END
-        async Task Do_END() {
+        async Task DO_END() {
             try {
                 _cycle.End();
-                _bodyCycle.End();
                 await SaveResultAsync();
-                await SaveBodyResultAsync();
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
             await Task.CompletedTask;
         }
 
 
-        //27. OPERATIONS
+        //27. AUTOBit
+        void UpdateAUTOBit()
+        {
+            try
+            {
+                if (_plc != null && _plc.Client != null) _plc.Client.SetDOBit("AUTO", IsAuto).Wait();
+            }
+            catch (Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
+        }
     }
 }

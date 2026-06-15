@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ATMC.App.BatteryTransfer")]
+[assembly: AssemblyTitle("ATMC.App.KMC.H5.HoodInstall")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ATMC.App.BatteryTransfer")]
+[assembly: AssemblyProduct("ATMC.App.KMC.H5.HoodInstall")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.25.25.1229")]
-[assembly: AssemblyFileVersion("1.25.25.1229")]
+[assembly: AssemblyVersion("1.25.26.0430")]
+[assembly: AssemblyFileVersion("1.25.26.0430")]

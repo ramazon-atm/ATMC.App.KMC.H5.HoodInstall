@@ -1,12 +1,116 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\ATMPRGS\\KMCH5\\ATMC.App.PosAdj\\",
-  "Documents": [],
+  "WorkspaceRootPath": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|d:\\atm-swteam\\kmch5_workcell\\\uD558\uC6B0\uD1A0\\atmc.app.kmc.h5.hoodinstall\\atmc.app.posadj\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|solutionrelative:atmc.app.posadj\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\atmc.app.posadj\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|solutionrelative:atmc.app.posadj\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\atmc.app.posadj\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|solutionrelative:atmc.app.posadj\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\atmc.app.posadj\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|solutionrelative:atmc.app.posadj\\formmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\atmc.app.posadj\\modelconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|solutionrelative:atmc.app.posadj\\modelconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\atmc.app.posadj\\formmain.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D729E42B-50F0-4893-A613-2DDF9493DFF2}|ATMC.App.PosAdj\\ATMC.App.PosAdj.csproj|solutionrelative:atmc.app.posadj\\formmain.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "FormMain.cs [Design]",
+              "DocumentMoniker": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\FormMain.cs",
+              "RelativeDocumentMoniker": "ATMC.App.PosAdj\\FormMain.cs",
+              "ToolTip": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\FormMain.cs [Design]",
+              "RelativeToolTip": "ATMC.App.PosAdj\\FormMain.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T05:31:33.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Result.cs",
+              "DocumentMoniker": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\Result.cs",
+              "RelativeDocumentMoniker": "ATMC.App.PosAdj\\Result.cs",
+              "ToolTip": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\Result.cs",
+              "RelativeToolTip": "ATMC.App.PosAdj\\Result.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAYwCkAAAA9AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T00:47:50.338Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ModelConfig.cs",
+              "DocumentMoniker": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\ModelConfig.cs",
+              "RelativeDocumentMoniker": "ATMC.App.PosAdj\\ModelConfig.cs",
+              "ToolTip": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\ModelConfig.cs",
+              "RelativeToolTip": "ATMC.App.PosAdj\\ModelConfig.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwCUAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T00:46:27.406Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FormMain.Designer.cs",
+              "DocumentMoniker": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\FormMain.Designer.cs",
+              "RelativeDocumentMoniker": "ATMC.App.PosAdj\\FormMain.Designer.cs",
+              "ToolTip": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\FormMain.Designer.cs",
+              "RelativeToolTip": "ATMC.App.PosAdj\\FormMain.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgBAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T00:44:38.415Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "FormMain.cs",
+              "DocumentMoniker": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\FormMain.cs",
+              "RelativeDocumentMoniker": "ATMC.App.PosAdj\\FormMain.cs",
+              "ToolTip": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\FormMain.cs",
+              "RelativeToolTip": "ATMC.App.PosAdj\\FormMain.cs",
+              "ViewState": "AgIAAFYAAAAAAAAAAAAAAEACAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T00:31:39.539Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AppConfig.cs",
+              "DocumentMoniker": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\AppConfig.cs",
+              "RelativeDocumentMoniker": "ATMC.App.PosAdj\\AppConfig.cs",
+              "ToolTip": "D:\\ATM-SWteam\\KMCH5_WORKCELL\\\uD558\uC6B0\uD1A0\\ATMC.App.KMC.H5.HoodInstall\\ATMC.App.PosAdj\\AppConfig.cs",
+              "RelativeToolTip": "ATMC.App.PosAdj\\AppConfig.cs",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAiwH8AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-30T00:31:32.95Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

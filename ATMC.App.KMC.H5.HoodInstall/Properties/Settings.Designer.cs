@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ATMC.App.PosAdj.Properties {
+namespace ATMC.App.KMC.H5.HoodInstall.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

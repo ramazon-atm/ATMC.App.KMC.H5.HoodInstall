@@ -13,30 +13,19 @@ using System.Drawing.Design;
 using System.IO;
 using System.Security.Policy;
 
-namespace ATMC.App.PosAdj {
+namespace ATMC.App.KMC.H5.HoodInstall {
     //Define car model configurations
     [JsonSerializable]
     [TypeConverter(typeof(AbeoTypeConverter))]
     public class ModelConfig : ModelConfigBase {
         [Category("REGISTRATION")]
-        public FastRegistrationConfig BatReg { get; set; } = new FastRegistrationConfig();
+        public FastRegistrationConfig Body12 { get; set; } = new FastRegistrationConfig();
 
-        [Category("REGISTRATION")]
-        public FastRegistrationConfig BodyReg { get; set; } = new FastRegistrationConfig();
-
-        [Category("REGISTRATION")]
-        public FastRegistrationConfig LhBodyReg { get; set; } = new FastRegistrationConfig();
-
-        [Category("REGISTRATION")]
-        public FastRegistrationConfig RhBodyReg { get; set; } = new FastRegistrationConfig();
         //TODO: add more registration configs if needed 
 
         //Define registration keys
         internal Dictionary<string, FastRegistrationConfig> RegDict => new Dictionary<string, FastRegistrationConfig> {
-            { Global.KEY_BODY, BodyReg},
-            { Global.KEY_BAT, BatReg},
-            { Global.KEY_LHBODY, LhBodyReg},
-            { Global.KEY_RHBODY, RhBodyReg},
+            { Global.KEY_BODY12, Body12}
         };
 
 
@@ -45,10 +34,7 @@ namespace ATMC.App.PosAdj {
         public override void Init() {
             try {
                 //make sure registration is not null
-                BatReg = BatReg ?? new FastRegistrationConfig();
-                BodyReg = BodyReg ?? new FastRegistrationConfig();
-                LhBodyReg = LhBodyReg ?? new FastRegistrationConfig();
-                RhBodyReg = RhBodyReg ?? new FastRegistrationConfig();
+                Body12 = Body12 ?? new FastRegistrationConfig();
                 //Init registrations
                 //model name = <key>_model_wc.ply
                 //cad name = <key>_cad_wc.stl
@@ -56,7 +42,7 @@ namespace ATMC.App.PosAdj {
                     kv.Value.Init(ModelDir, kv.Key, "wc");
                 }
 
-            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); }
+            } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
 
         //Create a new result
