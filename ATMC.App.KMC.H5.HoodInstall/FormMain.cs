@@ -18,6 +18,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ATMC.Common.WebUtils;
 using static ATMC.Common.WorkCell.WorkCell;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
@@ -35,6 +36,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
         //The task queue to process input signals
         TaskQueue _tq = new TaskQueue("Main TaskQueue");
+        TaskQueue _tq1 = new TaskQueue("INSTALL TaskQueue");
         //This variable stores current cycle context
         CycleContext_<ModelConfig, Result> _cycle = new CycleContext_<ModelConfig, Result>();
         ModelMaker _modelMaker = null;
@@ -383,8 +385,9 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     AlarmDialog.ShowAlarm($"Hw disconnected : {name}");
                 });
             }
-            if (name == "PLC" && connected == true) 
-                UpdateAUTOBit();
+            // Trash log 
+            //if (name == "PLC" && connected == true) 
+            //    UpdateAUTOBit();
         }
 
         private void HwErrCode_BitChanged(int index, bool old_value, bool new_value) {
@@ -581,8 +584,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     var vc = this.sv_Main;
                     var sv = vc.GetViewer();
                     FlyTo("org");
-                    sv["BODY/CAD"].UpdateObject(_cycle?.GetModel()?.Body12?.CadModel, Color.Gray);
-
+                    sv["PICK/CAD"].UpdateObject(_cycle?.GetModel()?.PickReg?.CadModel, Color.Gray);
+                    sv["INSTALL/CAD"].UpdateObject(_cycle?.GetModel()?.InstallReg?.CadModel, Color.Gray);
                     sv.Render();
                 } catch(Exception ex) {
                     Logger.Error(ex.Message);
@@ -630,9 +633,29 @@ namespace ATMC.App.KMC.H5.HoodInstall {
             var r = _cycle.GetResult(throw_if_invalid: false);
             var GetResult = new Func<string, (string, RegistrationResult)>(key => (key, r?.GetResultOrDefault(key)));
             var tbl = WebUtils.GetResultTable("Result", new (string, RegistrationResult)[]{
-                GetResult(Global.KEY_BODY12)
+                GetResult(Global.KEY_PICK),
+                GetResult(Global.KEY_PICK_deg),
+                GetResult(Global.KEY_INSTALL),
             });
-            await dashboard.SetResult(tbl);
+
+            var m = _cycle.GetModel();
+            var instOfs = m?.InstallReg?.ShiftOffset;
+
+            var offsetTbl = new ResultTableBuilder()
+                .Title("OFFSET")
+                .Columns("name", "dx", "dy", "dz", "drx", "dry", "drz")
+                .Row(
+                    ("name", "INSTALL", ""),
+                    ("dx", instOfs?.DX.ToString("F3") ?? "-", ""),
+                    ("dy", instOfs?.DY.ToString("F3") ?? "-", ""),
+                    ("dz", instOfs?.DZ.ToString("F3") ?? "-", ""),
+                    ("drx", instOfs?.DRx.ToString("F3") ?? "-", ""),
+                    ("dry", instOfs?.DRy.ToString("F3") ?? "-", ""),
+                    ("drz", instOfs?.DRz.ToString("F3") ?? "-", "")
+                )
+                .Build();
+
+            await dashboard.SetResult(new[] { tbl, offsetTbl });
 
         }
 
@@ -657,8 +680,10 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 //Reset PLC output
                 if (UseRobotIO) await _robot_io?.Client?.SetOutput(0);
                 else {
-                    await _plc?.Client?.SetDOBit(OutputPin.OK, false);
-                    await _plc?.Client?.SetDOBit(OutputPin.NG, false);
+                    await _plc?.Client?.SetDOBit(OutputPin.PICK_OK, false);
+                    await _plc?.Client?.SetDOBit(OutputPin.PICK_NG, false);
+                    await _plc?.Client?.SetDOBit(OutputPin.INSTALL_OK, false);
+                    await _plc?.Client?.SetDOBit(OutputPin.INSTALL_NG, false);
                 } 
             } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
@@ -673,8 +698,10 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 if(IsAuto) {
                     if(UseRobotIO) await _robot_io?.Client?.SetOutput(0);
                     else {
-                        await _plc?.Client?.SetDOBit(OutputPin.OK, false);
-                        await _plc?.Client?.SetDOBit(OutputPin.NG, false);
+                        await _plc?.Client?.SetDOBit(OutputPin.PICK_OK, false);
+                        await _plc?.Client?.SetDOBit(OutputPin.PICK_NG, false);
+                        await _plc?.Client?.SetDOBit(OutputPin.INSTALL_OK, false);
+                        await _plc?.Client?.SetDOBit(OutputPin.INSTALL_NG, false);
                         await ReadWorkCycleInfo();
                     }
                 }

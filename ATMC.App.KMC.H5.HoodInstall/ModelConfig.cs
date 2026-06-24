@@ -19,22 +19,31 @@ namespace ATMC.App.KMC.H5.HoodInstall {
     [TypeConverter(typeof(AbeoTypeConverter))]
     public class ModelConfig : ModelConfigBase {
         [Category("REGISTRATION")]
-        public FastRegistrationConfig Body12 { get; set; } = new FastRegistrationConfig();
-
+        public FastRegistrationConfig PickReg { get; set; } = new FastRegistrationConfig();
+        public FastRegistrationConfig Pick_degReg { get; set; } = new FastRegistrationConfig();
+        [Category("REGISTRATION")]
+        public FastRegistrationConfig InstallReg { get; set; } = new FastRegistrationConfig();
+        [Category("REGISTRATION")]
         //TODO: add more registration configs if needed 
 
         //Define registration keys
         internal Dictionary<string, FastRegistrationConfig> RegDict => new Dictionary<string, FastRegistrationConfig> {
-            { Global.KEY_BODY12, Body12}
+            { Global.KEY_PICK, PickReg},
+            { Global.KEY_PICK_deg, Pick_degReg},
+            { Global.KEY_INSTALL, InstallReg},
         };
 
+        //Robot poses
+        internal Dictionary<string, RobotPoseEx> RobotPoses = new Dictionary<string, RobotPoseEx>();
 
         //model name = model_wc.ply
         //cad name = cad_wc.ply
         public override void Init() {
             try {
                 //make sure registration is not null
-                Body12 = Body12 ?? new FastRegistrationConfig();
+                PickReg = PickReg ?? new FastRegistrationConfig();
+                Pick_degReg = Pick_degReg ?? new FastRegistrationConfig();
+                InstallReg = InstallReg ?? new FastRegistrationConfig();
                 //Init registrations
                 //model name = <key>_model_wc.ply
                 //cad name = <key>_cad_wc.stl

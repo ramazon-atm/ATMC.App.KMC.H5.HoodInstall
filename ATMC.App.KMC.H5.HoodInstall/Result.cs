@@ -38,11 +38,12 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 //TODO: add shift data (WC shift)
                 //convert to UF shift data if needed
                 {
-                    key = "body12";
+                    key = Global.KEY_PICK;
                     RegResults.TryGetValue(key, out var res);
                     if (res != null)
                     {
-                        var matrix = res.Matrix ?? res.LimitMatrix;
+                        //var matrix = res.Matrix ?? res.LimitMatrix;
+                        var matrix = res.LimitMatrix ?? res.Matrix;
                         var pose = new RobotPose(matrix);
                         values[key + "_FIT"] = (float)res.Fitness;
                         values[key + "_OVL"] = (float)res.Overlap;
@@ -56,29 +57,67 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 }
 
                 {
-                    var offset = (Model as ModelConfig).Body12.ShiftOffset;
-                    if (offset != null) {
-                        values["body12_OX"] = (float)offset.DX;
-                        values["body12_OY"] = (float)offset.DY;
-                        values["body12_OZ"] = (float)offset.DZ;
-                        values["body12_ORX"] = (float)offset.DRx;
-                        values["body12_ORY"] = (float)offset.DRy;
-                        values["body12_ORZ"] = (float)offset.DRz;
+                    key = Global.KEY_PICK_deg;
+                    RegResults.TryGetValue(key, out var res);
+                    if (res != null)
+                    {
+                        //var matrix = res.Matrix ?? res.LimitMatrix;
+                        var matrix = res.LimitMatrix ?? res.Matrix;
+                        var pose = new RobotPose(matrix);
+                        values[key + "_FIT"] = (float)res.Fitness;
+                        values[key + "_OVL"] = (float)res.Overlap;
+                        values[key + "_DX"] = (float)pose.X;
+                        values[key + "_DY"] = (float)pose.Y;
+                        values[key + "_DZ"] = (float)pose.Z;
+                        values[key + "_DRX"] = (float)pose.Rx;
+                        values[key + "_DRY"] = (float)pose.Ry;
+                        values[key + "_DRZ"] = (float)pose.Rz;
                     }
                 }
 
-                // insert to table
+                {
+                    key = Global.KEY_INSTALL;
+                    RegResults.TryGetValue(key, out var res);
+                    if (res != null)
+                    {
+                        //var matrix = res.Matrix ?? res.LimitMatrix;
+                        var matrix = res.LimitMatrix ?? res.Matrix;
+                        var pose = new RobotPose(matrix);
+                        values[key + "_FIT"] = (float)res.Fitness;
+                        values[key + "_OVL"] = (float)res.Overlap;
+                        values[key + "_DX"] = (float)pose.X;
+                        values[key + "_DY"] = (float)pose.Y;
+                        values[key + "_DZ"] = (float)pose.Z;
+                        values[key + "_DRX"] = (float)pose.Rx;
+                        values[key + "_DRY"] = (float)pose.Ry;
+                        values[key + "_DRZ"] = (float)pose.Rz;
+                    }
+
+                    var offset = (Model as ModelConfig).InstallReg.ShiftOffset;
+                    if (offset != null)
+                    {
+                        values[key + "_OX"] = (float)offset.DX;
+                        values[key + "_OY"] = (float)offset.DY;
+                        values[key + "_OZ"] = (float)offset.DZ;
+                        values[key + "_ORX"] = (float)offset.DRx;
+                        values[key + "_ORY"] = (float)offset.DRy;
+                        values[key + "_ORZ"] = (float)offset.DRz;
+                    }
+                }
+
                 DB.Engine.NewQuery()
                     .InsertInto(DB.TableName)
                     .Values(values)
                     .Execute();
 
-            } catch(Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
+            }
+            catch (Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
 
         //Save result
-        public override void Save(string prefix = "") {
-            if(RegResults.Count == 0) return;
+        public override void Save(string prefix = "")
+        {
+            if (RegResults.Count == 0) return;
             base.Save();
         }
     }
