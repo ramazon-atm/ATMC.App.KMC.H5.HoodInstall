@@ -107,10 +107,14 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //internal static string[] ScanActionKeys = new string[] { KEY_BODY12 };
 
         internal static List<ScanAction> ScanActionList; 
-        public static Dictionary<string, ScanAction> ScanActionDict; 
+        public static Dictionary<string, ScanAction> ScanActionDict;
 
         //INSTALL POSES
-        public static List<RobotPoseDef> InstallPoses = null; //no install pose
+        public static List<RobotPoseDef> InstallPoses = new List<RobotPoseDef>{
+            new RobotPoseDef($"{KEY_INSTALL1_POSE}:R1"),
+            new RobotPoseDef($"{KEY_INSTALL2_POSE}:R1"),
+        };
+
 
         //SCAN ACTION GROUP
         //if combine = true, combined cloud will be saved as model_raw_wc.asd
