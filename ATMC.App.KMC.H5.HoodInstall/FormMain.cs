@@ -36,7 +36,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
         //The task queue to process input signals
         TaskQueue _tq = new TaskQueue("Main TaskQueue");
-        TaskQueue _tq1 = new TaskQueue("INSTALL TaskQueue");
+        TaskQueue _tq1 = new TaskQueue("PICK TaskQueue");
+        TaskQueue _tq2 = new TaskQueue("INSTALL TaskQueue");
         //This variable stores current cycle context
         CycleContext_<ModelConfig, Result> _cycle = new CycleContext_<ModelConfig, Result>();
         ModelMaker _modelMaker = null;
