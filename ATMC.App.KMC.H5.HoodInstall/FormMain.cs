@@ -660,6 +660,16 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
         }
 
+        async Task ClearDO()
+        {
+            await _plc.Client.ClearDOBits(new List<Enum> {
+            OutputPin.PICK_OK,
+            OutputPin.PICK_NG,
+            OutputPin.INSTALL_OK,
+            OutputPin.INSTALL_NG,
+            });
+        }
+
 
         //24. RESET
         async Task DO_RESET() {
@@ -681,10 +691,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 //Reset PLC output
                 if (UseRobotIO) await _robot_io?.Client?.SetOutput(0);
                 else {
-                    await _plc?.Client?.SetDOBit(OutputPin.PICK_OK, false);
-                    await _plc?.Client?.SetDOBit(OutputPin.PICK_NG, false);
-                    await _plc?.Client?.SetDOBit(OutputPin.INSTALL_OK, false);
-                    await _plc?.Client?.SetDOBit(OutputPin.INSTALL_NG, false);
+                    await ClearDO();
                 } 
             } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
@@ -699,11 +706,9 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 if(IsAuto) {
                     if(UseRobotIO) await _robot_io?.Client?.SetOutput(0);
                     else {
-                        await _plc?.Client?.SetDOBit(OutputPin.PICK_OK, false);
-                        await _plc?.Client?.SetDOBit(OutputPin.PICK_NG, false);
-                        await _plc?.Client?.SetDOBit(OutputPin.INSTALL_OK, false);
-                        await _plc?.Client?.SetDOBit(OutputPin.INSTALL_NG, false);
+                        await ClearDO();
                         await ReadWorkCycleInfo();
+                        await _plc.Client.PulseDOBit(OutputPin.START_ARR, 500); // Pulse START_ARR for 500ms
                     }
                 }
 
