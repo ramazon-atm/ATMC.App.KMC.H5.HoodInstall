@@ -423,9 +423,18 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 var H1_r2 = H_install_r2 * Global.WorkCell.Graph.ToolToFrame("R2", H_install1_pose, H_install_r2_tool, "R2");
                 var H2_r2 = H_install_r2 * Global.WorkCell.Graph.ToolToFrame("R2", H_install1_pose, H_install_r2_tool, "R2");
 
-                //send door shift data to R2
-                if (await SendRobotShift("R2", H1_r2, Global.Setting.UFVarIdx))
-                    return true;
+                ////send door shift data to R2
+                //if (await SendRobotShift("R2", H1_r2, Global.Setting.UFVarIdx))
+                //    return true;
+
+                //send door shift data to r2
+                if (!await SendRobotShift("R2", H1_r2, Global.Setting.UFVarIdx))
+                    throw new Exception("install1 Failed to send shift data");
+
+                if (!await SendRobotShift("R2", H2_r2, Global.Setting.UFVarIdx + 1))
+                    throw new Exception("install2 Failed to send shift data");
+
+                return true;
             }
             catch (Exception ex)
             {
