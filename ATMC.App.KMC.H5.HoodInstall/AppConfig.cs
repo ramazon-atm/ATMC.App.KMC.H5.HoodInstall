@@ -457,9 +457,9 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 switch(key) {
                     case InputPin.RESET: _tq.Enqueue(DO_RESET); break;
                     case InputPin.START: _tq.Enqueue(DO_START); break;
-                    case InputPin.PICK: _tq1.Enqueue(async () => await DO_PICK_SCAN(0)); break;
-                    case InputPin.PICK_deg: _tq1.Enqueue(async () => await DO_PICK_SCAN(1)); break;
-                    case InputPin.INSTALL: _tq2.Enqueue(async () => await DO_INSTALL_SCAN()); break;
+                    case InputPin.PICK: _tq.Enqueue(async () => await DO_PICK_SCAN(0)); break;
+                    case InputPin.PICK_deg: _tq.Enqueue(async () => await DO_PICK_SCAN(1)); break;
+                    case InputPin.INSTALL: _tq.Enqueue(async () => await DO_INSTALL_SCAN()); break;
                     case InputPin.END: _tq.Enqueue(DO_END); break;
                         //TODO: SCAN SIGNAL
                 }
@@ -478,6 +478,18 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     ["title"]= "PICK",
                     ["actions"] = new Enum[] {
                         InputPin.PICK,  
+                    }
+                },
+                new Json(){
+                    ["title"]= "PICK_deg",
+                    ["actions"] = new Enum[] {
+                        InputPin.PICK,
+                    }
+                },
+                new Json(){
+                    ["title"]= "INSTALL",
+                    ["actions"] = new Enum[] {
+                        InputPin.PICK,
                     }
                 }
             });
