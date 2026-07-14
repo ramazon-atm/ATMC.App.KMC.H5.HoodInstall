@@ -421,7 +421,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 var H_install_r2 = Global.WorkCell.Graph.ChangeBasis("WC->R2", install_res.Matrix);
                 var H_install_r2_tool = Global.WorkCell.Graph.FrameToTool("WC", H_pick_wc.Inv(), "R2", H_pick_scan_pose); //frame shift to tool shift
                 var H1_r2 = H_install_r2 * Global.WorkCell.Graph.ToolToFrame("R2", H_install1_pose, H_install_r2_tool, "R2");
-                var H2_r2 = H_install_r2 * Global.WorkCell.Graph.ToolToFrame("R2", H_install1_pose, H_install_r2_tool, "R2");
+                var H2_r2 = H_install_r2 * Global.WorkCell.Graph.ToolToFrame("R2", H_install2_pose, H_install_r2_tool, "R2");
 
                 ////send door shift data to R2
                 //if (await SendRobotShift("R2", H1_r2, Global.Setting.UFVarIdx))
