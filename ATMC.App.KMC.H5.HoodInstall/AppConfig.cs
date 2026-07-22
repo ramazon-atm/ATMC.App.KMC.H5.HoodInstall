@@ -81,17 +81,14 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
         //registration keys
         public const string KEY_INSTALL = "install";
-
-        public const string KEY_PICK = "pick";
-        public const string KEY_PICK_deg = "pick_deg";
-
-
         public const string KEY_INSTALL1 = "install1";
         public const string KEY_INSTALL2 = "install2";
 
+        public const string KEY_PICK = "pick";
         public const string KEY_PICK1 = "pick1";
         public const string KEY_PICK2 = "pick2";
-
+        // deg reg keys
+        public const string KEY_PICK_deg = "pick_deg";
         public const string KEY_PICK1_deg = "pick1_deg";
         public const string KEY_PICK2_deg = "pick2_deg";
 
