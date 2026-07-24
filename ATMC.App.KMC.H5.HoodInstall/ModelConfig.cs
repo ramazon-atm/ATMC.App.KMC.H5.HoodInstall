@@ -36,6 +36,12 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
         //Robot poses
         internal Dictionary<string, RobotPoseEx> RobotPoses = new Dictionary<string, RobotPoseEx>();
+        [Category("GENERAL")]
+        [ReadOnly(true)]
+        public bool Valid => RobotPoses != null && RobotPoses.Count > 0
+            && PickReg != null && PickReg.Valid
+            && InstallReg != null && InstallReg.Valid
+            && Pick_degReg != null && Pick_degReg.Valid;
 
         //model name = model_wc.ply
         //cad name = cad_wc.ply
@@ -51,7 +57,11 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 foreach (var kv in RegDict) {
                     kv.Value.Init(ModelDir, kv.Key, "wc");
                 }
-
+                //Read robot poses from file
+                var robot_pose_file = $"{ModelDir}/robot_poses.json";
+                if (File.Exists(robot_pose_file)) {
+                    RobotPoses = JsonUtils.Read<Dictionary<string, RobotPoseEx>>(Json.ReadFromFile(robot_pose_file));
+                }
             } catch(Exception ex) { LotusAPI.Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
 

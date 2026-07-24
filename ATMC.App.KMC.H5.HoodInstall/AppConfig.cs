@@ -46,7 +46,9 @@ namespace ATMC.App.KMC.H5.HoodInstall {
     //================================================
     // Define INPUT / OUTPUT /MEMORY BLOCKS
     //================================================
-    public enum OutputPin { START_ARR,PICK_OK, PICK_NG, INSTALL_OK, INSTALL_NG, PCRUN, HW_ERR, AUTO }
+    public enum OutputPin { START_ARR, PICK_OK, PICK_NG, 
+                                       INSTALL_OK, INSTALL_NG, 
+                            PCRUN, HW_ERR, AUTO }
     public enum InputPin { RESET, START, PICK, PICK_deg, INSTALL, END }
     public enum PlcBlock { CAR_TYPE, BODY_NO, SEQ_NO, HW_ERRCODE, PCRUN }
 
@@ -69,9 +71,11 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //================================================
         public const string R1 = "R1";
         public const string R2 = "R2";
+        // main scans
         public const string S1 = "S1";
         public const string S2 = "S2";
         public const string S3 = "S3";
+        // deg scans
         public const string S4 = "S4";
         public const string S5 = "S5";
         public const string S6 = "S6";
@@ -80,13 +84,14 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         public const string WC_to_R2 = "WC->R2";
 
         //registration keys
+        public const string KEY_PICK = "pick";
+        public const string KEY_PICK1 = "pick1";
+        public const string KEY_PICK2 = "pick2";
+
         public const string KEY_INSTALL = "install";
         public const string KEY_INSTALL1 = "install1";
         public const string KEY_INSTALL2 = "install2";
 
-        public const string KEY_PICK = "pick";
-        public const string KEY_PICK1 = "pick1";
-        public const string KEY_PICK2 = "pick2";
         // deg reg keys
         public const string KEY_PICK_deg = "pick_deg";
         public const string KEY_PICK1_deg = "pick1_deg";

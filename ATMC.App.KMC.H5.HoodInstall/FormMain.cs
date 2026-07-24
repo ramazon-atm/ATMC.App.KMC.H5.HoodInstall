@@ -682,6 +682,9 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     FlyTo("org");
                     viewer.Scene.Remove("CLOUDS");
                     viewer.Scene.Remove("BODY");
+                    viewer.Scene.Remove("PICK");
+                    viewer.Scene.Remove("INSTALL");
+                    viewer.Scene.Remove("PICK_deg");
                     sv_Main.Render();
                     //Web: clear dashboard result
                     UpdateResultView().Wait();
