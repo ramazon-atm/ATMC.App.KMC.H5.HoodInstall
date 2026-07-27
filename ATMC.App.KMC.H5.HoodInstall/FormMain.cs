@@ -709,7 +709,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     else {
                         await ClearDO();
                         await ReadWorkCycleInfo();
-                        await _plc.Client.PulseDOBit(OutputPin.START_ARR, 500); // Pulse START_ARR for 500ms
+                        await _plc.Client.PulseDOBit(OutputPin.START_COMPL, 500); // Pulse START_COMPL for 500ms
                     }
                 }
 
