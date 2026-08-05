@@ -46,8 +46,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
     //================================================
     // Define INPUT / OUTPUT /MEMORY BLOCKS
     //================================================
-    public enum OutputPin { START_COMPL, PICK_OK, PICK_NG, 
-                                       INSTALL_OK, INSTALL_NG, 
+    public enum OutputPin { START_COMPL, PICK_OK, PICK_NG, INSTALL_OK, INSTALL_NG, 
                             PCRUN, HW_ERR, AUTO }
     public enum InputPin { RESET, START, PICK, PICK_deg, INSTALL, END }
     public enum PlcBlock { CAR_TYPE, BODY_NO, SEQ_NO, HW_ERRCODE, PCRUN }
