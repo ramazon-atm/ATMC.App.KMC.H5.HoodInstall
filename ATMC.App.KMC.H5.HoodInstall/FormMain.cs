@@ -627,22 +627,68 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //    ("rl", "-2.0", "ng"),
         //    ("rh", "-3.0", "ng"))
         //    .Build();
-        async Task UpdateResultView() {
+        //async Task UpdateResultView() {
+
+        //    var r = _cycle.GetResult(throw_if_invalid: false);
+        //    var GetResult = new Func<string, (string, RegistrationResult)>(key => (key, r?.GetResultOrDefault(key)));
+        //    var tbl = WebUtils.GetResultTable("Result", new (string, RegistrationResult)[]{
+        //        GetResult(Global.KEY_PICK),
+        //        //GetResult(Global.KEY_PICK_deg),
+        //        GetResult(Global.KEY_INSTALL),
+        //    });
+
+        //    var m = _cycle.GetModel();
+        //    var instOfs = m?.InstallReg?.ShiftOffset;
+
+        //    var offsetTbl = new ResultTableBuilder()
+        //        .Title("OFFSET")
+        //        .Columns("name", "dx", "dy", "dz", "drx", "dry", "drz")
+        //        .Row(
+        //            ("name", "INSTALL", ""),
+        //            ("dx", instOfs?.DX.ToString("F3") ?? "-", ""),
+        //            ("dy", instOfs?.DY.ToString("F3") ?? "-", ""),
+        //            ("dz", instOfs?.DZ.ToString("F3") ?? "-", ""),
+        //            ("drx", instOfs?.DRx.ToString("F3") ?? "-", ""),
+        //            ("dry", instOfs?.DRy.ToString("F3") ?? "-", ""),
+        //            ("drz", instOfs?.DRz.ToString("F3") ?? "-", "")
+        //        )
+        //        .Build();
+
+        //    await dashboard.SetResult(new[] { tbl, offsetTbl });
+
+        //}
+        
+        // ============================================================ 
+        // 24. Update result view with offset check, if no offset, only show result table
+        // ===========================================================
+        async Task UpdateResultView()
+        {
 
             var r = _cycle.GetResult(throw_if_invalid: false);
+
             var GetResult = new Func<string, (string, RegistrationResult)>(key => (key, r?.GetResultOrDefault(key)));
+
             var tbl = WebUtils.GetResultTable("Result", new (string, RegistrationResult)[]{
                 GetResult(Global.KEY_PICK),
-                //GetResult(Global.KEY_PICK_deg),
                 GetResult(Global.KEY_INSTALL),
+              //GetResult(Global.KEY_INSTALL_deg),
             });
 
-            var m = _cycle.GetModel();
+            var m = _cycle.GetModel() ?? Global.Models.FirstOrDefault();
             var instOfs = m?.InstallReg?.ShiftOffset;
+            //var inst_degOfs = m?.Install_degReg?.ShiftOffset;
+
+            bool hasOffset =
+                (instOfs != null && (instOfs.DX != 0 || instOfs.DY != 0 || instOfs.DZ != 0 || instOfs.DRx != 0 || instOfs.DRy != 0 || instOfs.DRz != 0)); // ||
+              //(inst_degOfs != null && (inst_degOfs.DX != 0 || inst_degOfs.DY != 0 || inst_degOfs.DZ != 0 || inst_degOfs.DRx != 0 || inst_degOfs.DRy != 0 || inst_degOfs.DRz != 0)); 
+
+            if (!hasOffset)
+            {
+                await dashboard.SetResult(tbl);
+                return;
+            }
 
             var offsetTbl = new ResultTableBuilder()
-                .Title("OFFSET")
-                .Columns("name", "dx", "dy", "dz", "drx", "dry", "drz")
                 .Row(
                     ("name", "INSTALL", ""),
                     ("dx", instOfs?.DX.ToString("F3") ?? "-", ""),
@@ -652,11 +698,21 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     ("dry", instOfs?.DRy.ToString("F3") ?? "-", ""),
                     ("drz", instOfs?.DRz.ToString("F3") ?? "-", "")
                 )
+                //.Row(
+                //    ("name", "INSTALL_deg", ""),
+                //    ("dx", inst_degOfs?.DX.ToString("F3") ?? "-", ""),
+                //    ("dy", inst_degOfs?.DY.ToString("F3") ?? "-", ""),
+                //    ("dz", inst_degOfs?.DZ.ToString("F3") ?? "-", ""),
+                //    ("drx", inst_degOfs?.DRx.ToString("F3") ?? "-", ""),
+                //    ("dry", inst_degOfs?.DRy.ToString("F3") ?? "-", ""),
+                //    ("drz", inst_degOfs?.DRz.ToString("F3") ?? "-", "")
+                //)
                 .Build();
 
             await dashboard.SetResult(new[] { tbl, offsetTbl });
-
         }
+
+        // ============================================================
 
         // ============================================================ 
         // 24. Update result view with offset check, if no offset, only show result table
