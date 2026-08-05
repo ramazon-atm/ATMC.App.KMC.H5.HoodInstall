@@ -633,7 +633,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
             var GetResult = new Func<string, (string, RegistrationResult)>(key => (key, r?.GetResultOrDefault(key)));
             var tbl = WebUtils.GetResultTable("Result", new (string, RegistrationResult)[]{
                 GetResult(Global.KEY_PICK),
-                GetResult(Global.KEY_PICK_deg),
+                //GetResult(Global.KEY_PICK_deg),
                 GetResult(Global.KEY_INSTALL),
             });
 

@@ -20,8 +20,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
     public class ModelConfig : ModelConfigBase {
         [Category("REGISTRATION")]
         public FastRegistrationConfig PickReg { get; set; } = new FastRegistrationConfig();
-        [Category("REGISTRATION")]
-        public FastRegistrationConfig Pick_degReg { get; set; } = new FastRegistrationConfig();
+        //[Category("REGISTRATION")]
+        //public FastRegistrationConfig Pick_degReg { get; set; } = new FastRegistrationConfig();
         [Category("REGISTRATION")]
         public FastRegistrationConfig InstallReg { get; set; } = new FastRegistrationConfig();
         
@@ -30,7 +30,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //Define registration keys
         internal Dictionary<string, FastRegistrationConfig> RegDict => new Dictionary<string, FastRegistrationConfig> {
             { Global.KEY_PICK, PickReg},
-            { Global.KEY_PICK_deg, Pick_degReg},
+            //{ Global.KEY_PICK_deg, Pick_degReg},
             { Global.KEY_INSTALL, InstallReg},
         };
 
@@ -40,8 +40,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         [ReadOnly(true)]
         public bool Valid => RobotPoses != null && RobotPoses.Count > 0
             && PickReg != null && PickReg.Valid
-            && InstallReg != null && InstallReg.Valid
-            && Pick_degReg != null && Pick_degReg.Valid;
+            && InstallReg != null && InstallReg.Valid;
+            //&& Pick_degReg != null && Pick_degReg.Valid;
 
         //model name = model_wc.ply
         //cad name = cad_wc.ply
@@ -49,7 +49,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
             try {
                 //make sure registration is not null
                 PickReg = PickReg ?? new FastRegistrationConfig();
-                Pick_degReg = Pick_degReg ?? new FastRegistrationConfig();
+                //Pick_degReg = Pick_degReg ?? new FastRegistrationConfig();
                 InstallReg = InstallReg ?? new FastRegistrationConfig();
                 //Init registrations
                 //model name = <key>_model_wc.ply

@@ -56,24 +56,24 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     }
                 }
 
-                {
-                    key = Global.KEY_PICK_deg;
-                    RegResults.TryGetValue(key, out var res);
-                    if (res != null)
-                    {
-                        //var matrix = res.Matrix ?? res.LimitMatrix;
-                        var matrix = res.LimitMatrix ?? res.Matrix;
-                        var pose = new RobotPose(matrix);
-                        values[key + "_FIT"] = (float)res.Fitness;
-                        values[key + "_OVL"] = (float)res.Overlap;
-                        values[key + "_DX"] = (float)pose.X;
-                        values[key + "_DY"] = (float)pose.Y;
-                        values[key + "_DZ"] = (float)pose.Z;
-                        values[key + "_DRX"] = (float)pose.Rx;
-                        values[key + "_DRY"] = (float)pose.Ry;
-                        values[key + "_DRZ"] = (float)pose.Rz;
-                    }
-                }
+                //{
+                //    key = Global.KEY_PICK_deg;
+                //    RegResults.TryGetValue(key, out var res);
+                //    if (res != null)
+                //    {
+                //        //var matrix = res.Matrix ?? res.LimitMatrix;
+                //        var matrix = res.LimitMatrix ?? res.Matrix;
+                //        var pose = new RobotPose(matrix);
+                //        values[key + "_FIT"] = (float)res.Fitness;
+                //        values[key + "_OVL"] = (float)res.Overlap;
+                //        values[key + "_DX"] = (float)pose.X;
+                //        values[key + "_DY"] = (float)pose.Y;
+                //        values[key + "_DZ"] = (float)pose.Z;
+                //        values[key + "_DRX"] = (float)pose.Rx;
+                //        values[key + "_DRY"] = (float)pose.Ry;
+                //        values[key + "_DRZ"] = (float)pose.Rz;
+                //    }
+                //}
 
                 {
                     key = Global.KEY_INSTALL;

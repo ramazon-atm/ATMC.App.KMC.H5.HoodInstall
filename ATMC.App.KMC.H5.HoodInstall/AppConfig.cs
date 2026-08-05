@@ -133,8 +133,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 new ScanAction(KEY_INSTALL2, Scan_S2R1),
                 new ScanAction(KEY_PICK1, Scan_S3R2, new RobotPoseDef($"{KEY_PICK_SCAN_POSE}:R2")),
                 new ScanAction(KEY_PICK2, Scan_S4R2, new RobotPoseDef($"{KEY_PICK_SCAN_POSE}:R2")),
-                new ScanAction(KEY_PICK1_deg, Scan_S5R2, new RobotPoseDef($"{KEY_PICK_SCAN_POSE}:R2")),
-                new ScanAction(KEY_PICK2_deg, Scan_S6R2, new RobotPoseDef($"{KEY_PICK_SCAN_POSE}:R2")),
+                //new ScanAction(KEY_PICK1_deg, Scan_S5R2, new RobotPoseDef($"{KEY_PICK_SCAN_POSE}:R2")),
+                //new ScanAction(KEY_PICK2_deg, Scan_S6R2, new RobotPoseDef($"{KEY_PICK_SCAN_POSE}:R2")),
             };
 
             ScanActionDict = ScanActionList.ToActionDict();
@@ -142,7 +142,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
             ScanActionGroups = new List<ScanActionGroup> { 
                 new ScanActionGroup(name:KEY_INSTALL,actions:ScanActionDict.GetActionList(KEY_INSTALL1,KEY_INSTALL2),combine:true),
                 new ScanActionGroup(name:KEY_PICK,actions:ScanActionDict.GetActionList(KEY_PICK1, KEY_PICK2),combine:true),
-                new ScanActionGroup(name:KEY_PICK_deg,actions:ScanActionDict.GetActionList(KEY_PICK1_deg, KEY_PICK2_deg),combine:true),
+                //new ScanActionGroup(name:KEY_PICK_deg,actions:ScanActionDict.GetActionList(KEY_PICK1_deg, KEY_PICK2_deg),combine:true),
             };
         }
     }
