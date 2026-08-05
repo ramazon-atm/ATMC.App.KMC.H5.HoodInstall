@@ -658,6 +658,48 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
         }
 
+        // ============================================================ 
+        // 24. Update result view with offset check, if no offset, only show result table
+        // ===========================================================
+        //async Task UpdateResultView() {
+
+        //    var r = _cycle.GetResult(throw_if_invalid: false);
+        //    var GetResult = new Func<string, (string, RegistrationResult)>(key => (key, r?.GetResultOrDefault(key)));
+        //    var tbl = WebUtils.GetResultTable("Result", new (string, RegistrationResult)[]{
+        //        GetResult(Global.KEY_PICK),
+        //        GetResult(Global.KEY_PICK_deg),
+        //        GetResult(Global.KEY_INSTALL),
+        //    });
+
+        //    var m = _cycle.GetModel() ?? Global.Models.FirstOrDefault();
+        //    var instOfs = m?.InstallReg?.ShiftOffset;
+
+        //    bool hasOffset =
+        //        (instOfs != null && (instOfs.DX != 0 || instOfs.DY != 0 || instOfs.DZ != 0 || instOfs.DRx != 0 || instOfs.DRy != 0 || instOfs.DRz != 0));
+        //    if (!hasOffset) {
+        //        await dashboard.SetResult(tbl);
+        //        return;
+        //    }
+
+        //    var offsetTbl = new ResultTableBuilder()
+        //        .Title("OFFSET")
+        //        .Columns("name", "dx", "dy", "dz", "drx", "dry", "drz")
+        //        .Row(
+        //            ("name", "INSTALL", ""),
+        //            ("dx", instOfs?.DX.ToString("F3") ?? "-", ""),
+        //            ("dy", instOfs?.DY.ToString("F3") ?? "-", ""),
+        //            ("dz", instOfs?.DZ.ToString("F3") ?? "-", ""),
+        //            ("drx", instOfs?.DRx.ToString("F3") ?? "-", ""),
+        //            ("dry", instOfs?.DRy.ToString("F3") ?? "-", ""),
+        //            ("drz", instOfs?.DRz.ToString("F3") ?? "-", "")
+        //        )
+        //        .Build();
+
+        //    await dashboard.SetResult(new[] { tbl, offsetTbl });
+        //}
+
+        // ============================================================
+
         async Task ClearDO()
         {
             await _plc.Client.ClearDOBits(new List<Enum> {
