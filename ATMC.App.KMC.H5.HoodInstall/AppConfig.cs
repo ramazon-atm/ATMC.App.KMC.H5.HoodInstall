@@ -496,12 +496,12 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                         InputPin.PICK,  
                     }
                 },
-                new Json(){
-                    ["title"]= "PICK_deg",
-                    ["actions"] = new Enum[] {
-                        InputPin.PICK,
-                    }
-                },
+                //new Json(){
+                //    ["title"]= "PICK_deg",
+                //    ["actions"] = new Enum[] {
+                //        InputPin.PICK,
+                //    }
+                //},
                 new Json(){
                     ["title"]= "INSTALL",
                     ["actions"] = new Enum[] {
