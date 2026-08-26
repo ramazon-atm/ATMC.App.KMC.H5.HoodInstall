@@ -19,7 +19,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //}
         public override void SaveDB()
         {
-            if (RegResults.Count == 0) { return; }
+            if (RegResults.Count == 0 && Clouds.Count == 0) { return; }
             try {
                 OK = RegResults.Count > 0 && RegResults.Values.All(x => x != null && x.OK);
                 
@@ -117,7 +117,9 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //Save result
         public override void Save(string prefix = "")
         {
-            if (RegResults.Count == 0) return;
+            // On an alignment failure RegResults can be empty, while Clouds holds
+            // the raw scan and shade image needed for diagnosis.
+            if (RegResults.Count == 0 && Clouds.Count == 0) return;
             base.Save();
         }
     }

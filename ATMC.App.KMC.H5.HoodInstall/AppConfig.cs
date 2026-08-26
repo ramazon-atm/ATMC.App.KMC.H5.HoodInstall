@@ -207,8 +207,9 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     var pc1 = t1.Result ?? throw new Exception($"Failed to scan ({scanAction1.Name})");
                     var pc2 = t2.Result ?? throw new Exception($"Failed to scan ({scanAction2.Name})");
 
-                    //r.Clouds[action_key1] = pc1;
-                    //r.Clouds[action_key2] = pc2;
+                    r.Clouds[action_key1] = pc1;
+                    r.Clouds[action_key2] = pc2;
+
                     ShadeImage1 = pc1.ShadeImage;
                     ShadeImage2 = pc2.ShadeImage;
 
@@ -320,9 +321,10 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     await Task.WhenAll(t1, t2);
                     var pc1 = t1.Result ?? throw new Exception($"Failed to scan ({scanAction1.Name})");
                     var pc2 = t2.Result ?? throw new Exception($"Failed to scan ({scanAction2.Name})");
-                    
-                    //r.Clouds[action_key1] = pc1;
-                    //r.Clouds[action_key2] = pc2;
+
+                    r.Clouds[action_key1] = pc1;
+                    r.Clouds[action_key2] = pc2;
+
                     ShadeImage1 = pc1.ShadeImage;
                     ShadeImage2 = pc2.ShadeImage;
 

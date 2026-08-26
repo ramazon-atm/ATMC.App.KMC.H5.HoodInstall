@@ -31,6 +31,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //PLC helper
         PlcHelper _plc = null;
         RobotIOHelper _robot_io = null;
+        bool _autoBitSynced = false;
+        bool _startupOutputCleared = false;
         bool UseRobotIO => Global.Setting.PlcSystem == PlcSystemEnum.NoPLC;
         bool UsePlc => Global.Setting.PlcSystem != PlcSystemEnum.NoPLC;
 
@@ -185,9 +187,18 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     case "get_mode": await dashboard.SetMode(IsAuto); break;
 
                     //PLC
-                    case "get_pinmap": {
-                            if(UseRobotIO) await _robot_io?.ReadPinmap();
-                            else await _plc?.ReadPinmap();
+                    case "get_pinmap":
+                        {
+                            if (UseRobotIO)
+                            {
+                                await _robot_io?.ReadPinmap();
+                            }
+                            else
+                            {
+                                await _plc?.ReadPinmap();
+                                if (IsAuto)
+                                    await dashboard.SetOutputPin("AUTO", true);
+                            }
                         }
                         break;
                     case "input_pin_dblclick": {
@@ -372,21 +383,72 @@ namespace ATMC.App.KMC.H5.HoodInstall {
         //============================================================
         //13. HW STATUS
         //============================================================
-        void SetHwStatus(string name, bool connected) {
+        //void SetHwStatus(string name, bool connected) {
+        //    statusbar.StatusItems.SetStatus(name, connected);
+        //    //do hw error
+        //    if(UsePlc) {
+        //        _hwerr.SetBit(name, !connected); //when disconnected -> set error bit
+        //    }
+
+        //    if(!connected && Global.Setting.ShowHwErrAlarm) {
+        //        AsyncInvoke(delegate {
+        //            AlarmDialog.ShowAlarm($"Hw disconnected : {name}");
+        //        });
+        //    }
+        //    // Trash log 
+        //    //if (name == "PLC" && connected == true) 
+        //    //    UpdateAUTOBit();
+        //}
+        void SetHwStatus(string name, bool connected)
+        {
             statusbar.StatusItems.SetStatus(name, connected);
-            //do hw error
-            if(UsePlc) {
-                _hwerr.SetBit(name, !connected); //when disconnected -> set error bit
+
+            if (UsePlc)
+            {
+                _hwerr.SetBit(name, !connected);
             }
 
-            if(!connected && Global.Setting.ShowHwErrAlarm) {
+            if (!connected && Global.Setting.ShowHwErrAlarm)
+            {
                 AsyncInvoke(delegate {
                     AlarmDialog.ShowAlarm($"Hw disconnected : {name}");
                 });
             }
-            // Trash log 
-            //if (name == "PLC" && connected == true) 
-            //    UpdateAUTOBit();
+
+            if (name == "PLC")
+            {
+                if (!connected)
+                {
+                    _autoBitSynced = false;
+                    _startupOutputCleared = false;
+                    return;
+                }
+
+                // PLC reload clearing output signals
+                if (!_startupOutputCleared)
+                {
+                    _startupOutputCleared = true;
+
+                    try
+                    {
+                        ClearDO().Wait();
+                    }
+                    catch (Exception ex)
+                    {
+                        _startupOutputCleared = false;
+
+                        Logger.Error(ex.Message);
+                        Logger.Trace(ex.StackTrace);
+                    }
+                }
+
+                // AUTO bit sync
+                if (!_autoBitSynced)
+                {
+                    UpdateAUTOBit();
+                    _autoBitSynced = true;
+                }
+            }
         }
 
         private void HwErrCode_BitChanged(int index, bool old_value, bool new_value) {
@@ -825,11 +887,24 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
 
         //27. AUTOBit
+        //        void UpdateAUTOBit()
+        //        {
+        //            try
+        //            {
+        //                if (_plc != null && _plc.Client != null) _plc.Client.SetDOBit("AUTO", IsAuto).Wait();
+        //            }
+        //            catch (Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
+        //        }
+        //    }
+        //}
         void UpdateAUTOBit()
         {
             try
             {
-                if (_plc != null && _plc.Client != null) _plc.Client.SetDOBit("AUTO", IsAuto).Wait();
+                if (_plc == null || _plc.Client == null)
+                    return;
+                _plc.Client.SetDOBit("AUTO", IsAuto).Wait();
+                return;
             }
             catch (Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
         }
