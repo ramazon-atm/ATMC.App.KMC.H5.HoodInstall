@@ -264,13 +264,19 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                         ProcessInputSignal(value.GetString(""));
                         break;
                     //history double click
-                    case "history_table_row_dblclick": {
+                    case "history_table_row_dblclick":
+                        {
+                            if (!value.TryGetInt("id", out int resultId))
+                                throw new Exception("History row ID is missing.");
+
                             var res_dir = await DB.Engine.NewQuery()
                                 .Select("RESULT_DIR").From(DB.TableName)
-                                .Where("MODEL", value["model"].GetString(""))
-                                .Where("BODY_NO", value["body"].GetString(""))
-                                .Where("SEQ_NO", value["seq"].GetString(""))
+                                .Where("ID", resultId)
                                 .ExecuteScalarAsync();
+
+                            if (res_dir == null)
+                                throw new Exception($"History result not found (ID={resultId}).");
+
                             FormImageView.Show(res_dir.ToString(), "*.jpg|*.png");
                         }
                         break;
@@ -623,7 +629,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 var res = _cycle.GetResult();
                 Logger.Log("Saving result...");
                 res.SaveDB();
-                await dashboard.SetHistory(DB.Engine);
+                await SetHistoryAsync();
 
                 AsyncInvoke(delegate {
                     res.ScreenShot = ControlUtils.GetScreenCrop(this);
@@ -631,7 +637,45 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 });
             } catch(Exception ex) { Logger.Error(ex.Message); Logger.Trace(ex.StackTrace); }
             await Task.CompletedTask;
-        } 
+        }
+        async Task SetHistoryAsync()
+        {
+            await dashboard.SetHistory(DB.Engine);
+
+            string todayStart = $"{DateTime.Now:yyyy-MM-dd} 00:00:00";
+            Json table = new Json();
+            table["cols"] = new Json
+            {
+                [0] = "time",
+                [1] = "model",
+                [2] = "body",
+                [3] = "seq",
+                [4] = "res"
+            };
+
+            using (var reader = await DB.Engine.NewQuery()
+                .Select("ID", "DATE", "MODEL", "BODY_NO", "SEQ_NO", "RESULT")
+                .From(DB.TableName)
+                .Where("DATE", ">=", todayStart)
+                .OrderBy("ID", ascending: false)
+                .ExecuteReaderAsync())
+            {
+                Json rows = table["rows"];
+                int index = 0;
+                while (reader.Read())
+                {
+                    Json row = rows[index++];
+                    row["id"] = Convert.ToInt32(reader[0]);
+                    row["time"] = Convert.ToDateTime(reader[1]).ToString("HH:mm:ss");
+                    row["model"] = reader.GetString(2);
+                    row["body"] = reader.GetString(3);
+                    row["seq"] = reader.GetString(4);
+                    row["res"] = reader.GetString(5);
+                }
+            }
+
+            await dashboard.SendMessage(message => message.Type("set_history").Set("value", table));
+        }
 
         //============================================================
         // WORK CYCLE RELATED
