@@ -183,8 +183,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
                 Pointcloud scene = null;
 
-                LotusAPI.MV.Image ShadeImage1 = null;
-                LotusAPI.MV.Image ShadeImage2 = null;
+                //LotusAPI.MV.Image ShadeImage1 = null;
+                //LotusAPI.MV.Image ShadeImage2 = null;
 
                 // Scan
                 if (manual_load)
@@ -210,8 +210,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     r.Clouds[action_key1] = pc1;
                     r.Clouds[action_key2] = pc2;
 
-                    ShadeImage1 = pc1.ShadeImage;
-                    ShadeImage2 = pc2.ShadeImage;
+                    //ShadeImage1 = pc1.ShadeImage;
+                    //ShadeImage2 = pc2.ShadeImage;
 
                     scene = Pointcloud.Combine(pc1, pc2);
                 }
@@ -231,7 +231,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 var res = reg.Align(scene: scene, initial_matrix: null, check_limit: false)
                     ?? throw new Exception($"[{key}] Registration result is NULL!");
                 
-                res.SceneImgs = new LotusAPI.MV.Image[] { ShadeImage1, ShadeImage2 };
+                //res.SceneImgs = new LotusAPI.MV.Image[] { ShadeImage1, ShadeImage2 };
                 r.RegResults[key] = res;
 
                 var H_wc = res.Matrix;
@@ -298,8 +298,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
 
                 Pointcloud scene = null;
 
-                LotusAPI.MV.Image ShadeImage1 = null;
-                LotusAPI.MV.Image ShadeImage2 = null;
+                //LotusAPI.MV.Image ShadeImage1 = null;
+                //LotusAPI.MV.Image ShadeImage2 = null;
 
                 // Scan
                 if (manual_load)
@@ -325,8 +325,8 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                     r.Clouds[action_key1] = pc1;
                     r.Clouds[action_key2] = pc2;
 
-                    ShadeImage1 = pc1.ShadeImage;
-                    ShadeImage2 = pc2.ShadeImage;
+                    //ShadeImage1 = pc1.ShadeImage;
+                    //ShadeImage2 = pc2.ShadeImage;
 
                     scene = Pointcloud.Combine(pc1, pc2);
                 }
@@ -346,7 +346,7 @@ namespace ATMC.App.KMC.H5.HoodInstall {
                 var res = reg.Align(scene: scene, initial_matrix: null, check_limit: false)
                     ?? throw new Exception($"[{key}] Registration result is NULL!");
 
-                res.SceneImgs = new LotusAPI.MV.Image[] { ShadeImage1, ShadeImage2 };
+                //res.SceneImgs = new LotusAPI.MV.Image[] { ShadeImage1, ShadeImage2 };
                 r.RegResults[key] = res;
 
                 // 2.H_cen에 Offset을 적용한 경우
